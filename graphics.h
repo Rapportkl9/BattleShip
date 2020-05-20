@@ -16,15 +16,17 @@ uint8_t lineWidth = 1;
 uint8_t pointWidth = 10;
 
 void drawBoard(){
+	
 	coproc_clear_color_rgb(0, 0, 0); //clears screen of old junk
 	drawBoardBoundaries(boardOrigoX, boardOrigoY, boxWidth); //draws a border matrix in which ships are placed
 	
 	//draws shoot/friedly board depending on toggle value
-	if(toggle == false){
-		drawShootBoard();
-	}
-	else if(toggle == true){
+	if(toggle == true){
 		drawFriendlyBoard();
+	}
+	else if(toggle == false){
+		drawShootBoard();
+		drawCursor();
 	}
 	toggle = false;
 }
@@ -94,8 +96,6 @@ void drawShootBoard(void){
 			}
 		}
 	}
-	//update cursor
-	drawCursor();
 }
 
 /** Draws a yellow cursor dot on the board, and if in setup mode - the ships to be placed are shown and updated aswell */
