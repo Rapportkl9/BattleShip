@@ -8,6 +8,7 @@
 #include "definitions_ftdi"
 #include "commands_ftdi.h"
 #include <stdbool.h>
+#include <util/delay.h>
 
 #ifndef GAME_ENGINE_H_
 #define GAME_ENGINE_H_
@@ -60,15 +61,12 @@ void buttonPoll(void)
 		case BTN_DN: return DN;
 		
 		case BTN_UP: return UP;
-			
+		
 		case BTN_L: return L;
 		
 		case BTN_R: return R;
 		
 		case BTN_SEL: return SEL;
-			
-		//debouncing delay
-		_delay_ms(100);
 	}
 }
 
@@ -100,19 +98,23 @@ void waitForSelect(void){
 	{
 		if(buttonPoll == L) {
 			colSel = (colSel - 1)%Cols;
-			drawCursor();					//drawCursor() is placed in the if-satsers so as not to draw unless a button is pushed :)
+			drawCursor();//drawCursor() is placed in the if-satsers so as not to draw unless a button is pushed :)
+			_delay_ms(200);
 		}
 		else if(buttonPoll == R) {
 			colSel = (colSel + 1)%Cols;
 			drawCursor();
+			_delay_ms(200);
 		}
 		if (buttonPoll == DN) {
 			rowSel = (rowSel + 1)%Rows;
 			drawCursor();
+			_delay_ms(200);
 		}
 		else if(buttonPoll == UP) {
 			rowSel = (rowSel - 1)%Rows;
 			drawCursor();
+			_delay_ms(200);
 		}
 		
 		//pushing left and right simultaneously generates a toggle which is used when toggling between friendly and shoot boards
@@ -224,8 +226,8 @@ void shootShips(void){
 	if(noWinner == true) {
 		waitForSelect();
 	}
-	
-	if (playerTwoBoard[rowSel][colSel] == 1 && playerOneShootBoard[rowSel][colSel] == 0) {
+
+	if (playerTwoBoard[rowSel][colSel] == 1) {
 		playerOneShootBoard[rowSel][colSel] = 2;
 		playerOneHit++;
 		if (playerOneHit == 17) {
@@ -242,7 +244,7 @@ void shootShips(void){
 		waitForSelect();
 	}
 	
-	if (playerOneBoard[rowSel][colSel] == 1 && playerTwoShootBoard[rowSel][colSel] == 0) {
+	if (playerOneBoard[rowSel][colSel] == 1) {
 		playerTwoShootBoard[rowSel][colSel] = 2;
 		playerTwoHit++;
 		if (playerTwoHit == 17) {
